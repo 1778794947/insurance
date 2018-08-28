@@ -1,0 +1,137 @@
+drop database if exists insuranceDB;
+create database insuranceDB;
+use insuranceDB;
+# 管理员注册信息表
+drop table if exists admin;
+create table admin(
+	aId int primary key auto_increment,
+	aName char(10) not null,
+	aPwd char(15) not null,
+	aPermission tinyint not null
+);
+# 用户注册信息表
+drop table if exists userinfo;
+create table userinfo(
+	uId int primary key auto_increment,
+	uName char(30) not null,
+	uPwd char(15) not null,
+	uEmail char(32) not null
+);
+# 保险类型信息表
+drop table if exists type;
+create table type(
+	tId int primary key auto_increment,
+	tName char(30) not null
+);
+# 保险单信息表
+drop table if exists policy;
+create table policy(
+	pId int primary key auto_increment,
+	pName char(50) not null,
+	pMoney int comment '保险售价',
+	pMinLose int comment '最小赔付金额',
+	pMaxLose int comment '最大赔付金额',
+	pDesc varchar(100) comment '保险产品描述',
+	tName char(30) comment '产品类型',
+	pImg char(30) comment '产品图片'
+);
+
+# 用户真实信息表
+drop table if exists zinfo;
+create table zinfo(
+	zId int primary key auto_increment,
+	zName char(10) not null comment '被保人真实姓名',
+	zNumber char(18) not null comment '被保人身份证号',
+	zBirthday date not null comment '出生日期',
+	zTel char(15) not null comment '本人联系电话',
+	zAddress char(50) not null comment '本人现住址',
+	iName char(10) comment '投保人真实姓名',
+	iNumber char(18) comment '投保人身份证号码',
+	iTel char(15) not null comment '投保人联系电话',
+	iAddress char(50) not null comment '投保人现住址'
+);
+
+# 用户保险单信息表
+drop table if exists regpolicy;
+create table regpolicy(
+	rId int primary key auto_increment,
+	rDateReg date not null comment '购买日期',
+	rTerm tinyint comment '保险期限',
+	rStatus tinyint not null comment '保险状态',
+	zName char(10) comment '被保人真实姓名',
+	zNumber char(18) comment '被保人身份证号码',
+	iName char(10) comment '投保人真实姓名',
+	iNumber char(18) comment '投保人身份证号码',
+	pName char(50) comment '保险名称',
+	pMoney int comment '保险售价',
+	pMinLose int comment '最小赔付金额',
+	pMaxLose int comment '最大赔付金额',
+	uName char(30)
+);
+
+-- # 保险单交易信息表
+-- drop table if exists business;
+-- create table business(
+-- 	bId int primary key auto_increment,
+-- 	bPaymentTime date,
+-- 	bMoney int not null comment '金额',
+-- 	bDescription char(50),
+-- 	rId int
+-- );
+# 用户索赔填写表
+drop table if exists claim;
+create table claim(
+	cId int primary key auto_increment,
+	cDesc varchar(100),
+	cFile char(50),
+	pName char(50),
+	zName char(15)
+-- 	cTotalMoney int not null comment '索赔金额',
+-- 	aId int
+);
+
+# 管理员回执
+create table breply(
+	bId int primary key auto_increment,
+	bDesc char(50),
+	cPayMoney int not null comment '赔偿金额',
+	pName char(50),
+	zName char(15),
+	aName char(10),
+	uName char(30)
+);
+
+insert into admin values
+(null,"admin","12346789",0);
+insert into userinfo values
+(null,"张三","123a","wduewyy@126.com"),
+(null,"my","123my","780632492@qq.com");
+insert into type values
+(null,"寿险"),
+(null,"意外险"),
+(null,"健康险"),
+(null,"儿童险");
+#insert into policy values
+#(null,"国寿松鹤颐年年金保险(分红型)",200,1000,5000,"国寿松鹤...","养老保险","tp.jpg"),
+#(null,"国寿个人养老年金保险(分红型)",200,1000,5000,"国寿个人...","养老保险","ss.jpg");
+
+use insuranceDB;
+INSERT INTO policy VALUES (null, '平安福寿安康保险', 2000, 10000, 100000, '平安福寿安康保险（平安人寿）', '寿险', '15288710929511.png');
+INSERT INTO policy VALUES (null, '全能英才少儿教育金', 370, 90000, 900000, '独享5大优势，为孩子的未来成长进行投资，最高可享170.4万育儿金', '寿险', '15277477134794.png');
+INSERT INTO policy VALUES (null, '一年期综合意外保险', 300, 10000, 300000, '性价比极高\r\n每天不到1块钱，全年保障几十万同等保障，价格更低', '意外险', '1527748578361.png');
+INSERT INTO policy VALUES (null, '平安e家保2018', 100, 10000, 100000, '专家随时问，药瓶送上门，看病不排队，门诊打对折', '健康险', '15277487626057.png');
+INSERT INTO policy VALUES (null, '全能英才教育金', 1000, 10000, 50000, '独享5大优势，为孩子的未来成长进行投资，最高可享170.4万育儿金', '儿童险', '20180727160557.png');
+INSERT INTO policy VALUES (null, '平安洁牙卡', 160, 1000, 5000, '精选齿科网络，17座城市120余所知名齿科 全面齿科护理 高额齿科保障', '健康险', 'QQ浏览器截图20180728151301.png');
+INSERT INTO policy VALUES (null, '运动卫士', 58, 1000, 50000, '保护每个热爱运动的你，可保一天也可宝一年，最低只需0.6元/天', '健康险', 'QQ浏览器截图20180728151525.png');
+INSERT INTO policy VALUES (null, '短期综合意外险', 100, 1000, 500000, '提供全方位综合保障,保额最高可达1000万元', '意外险', 'QQ浏览器截图20180728151733.png');
+INSERT INTO policy VALUES (null, '少儿超能宝两全保险(3.0)', 500, 10000, 150000, '少儿超能宝3.0保险产品计划涵盖了100种重大疾病和50种特定疾病(轻症)，其中包含了儿童常见的白血病、严重川崎病以及重症手足口病等，保障范围更广，为您的宝宝提供更加全面的健康保障', '儿童险', 'QQ截图20180729185926.png');
+
+
+insert into regpolicy values
+(null,"2018-07-27",2,0,"李飞","123456789999098767","李飞","123456789999098767","国寿松鹤颐年年金保险(分红型)",200,1000,5000,"张三"),
+(null,"2018-07-26",2,0,"李风","123456789999098767","李老刘","123456789999098767","国寿个人养老年金保险(分红型)",200,1000,5000,"张三");
+
+use insuranceDB;
+INSERT INTO claim VALUES (null, '这是索赔的描述', 'ReadMe.txt', '平安福寿安康保险','张三');
+INSERT INTO claim VALUES (null, '我要赔保，我的腿断了', '断腿.txt', '平安福寿安康保险','李四');
+INSERT INTO claim VALUES (null, '我被车撞了，需要住院补贴', 'AS_SSD_Benchmark.zip', '平安福寿安康保险','张三');
